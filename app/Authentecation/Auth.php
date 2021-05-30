@@ -124,11 +124,28 @@ class Auth {
         return ( static::check() ? static::$user[static::$primary_key] : null );
     }
 
+    private function get_token_from_request_headers() {
+
+        if (isset($_SERVER['HTTP_AUTHORIZATION'])) return trim($_SERVER['HTTP_AUTHORIZATION']);
+
+        if (isset($_SERVER['Authorization'])) return trim($_SERVER["Authorization"]);
+
+        if ( ! function_exists('apache_request_headers')) return null;
+
+        $requestHeaders = apache_request_headers();
+
+        $requestHeaders = array_combine(array_map('ucwords', array_keys($requestHeaders)), array_values($requestHeaders));
+
+        if(isset($requestHeaders['Authorization'])) return trim($requestHeaders['Authorization']);
+
+        return null;
+    }
+
     private function set_authorization_token() {
 
-        if(! isset($_SERVER['HTTP_AUTHORIZATION'])) return false;
+        $auth_header = $this->get_token_from_request_headers();
 
-        $auth_header = $_SERVER['HTTP_AUTHORIZATION'];
+        if($auth_header == null) return false; 
 
         $temp = explode(" ", $auth_header);
 
