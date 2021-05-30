@@ -63,6 +63,15 @@ class RegisterUserRequest extends RequestForm {
             return false;
         }
 
+        if( isset($this->request['ProfilePic']) ) {
+
+            if( strlen($this->request['ProfilePic']) >= IMAGE_MAX_SIZE_IN_BYTES ) {
+
+                BadPracticeResponse::toJson([], 0, "IMAGE must be less than " . IMAGE_MAX_SIZE_IN_BYTES . " bytes", 200);
+
+            }
+        }
+
         return true;
     }
 

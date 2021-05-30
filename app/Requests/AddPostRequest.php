@@ -29,6 +29,15 @@ class AddPostRequest extends RequestForm {
         $this->request['PostType'] = filter_var($this->request['PostType'], FILTER_SANITIZE_STRING);
 
         if(! is_string($this->request['PostDate'])) return false;
+
+        if( isset($this->request['PostImage']) ) {
+
+            if( strlen($this->request['PostImage']) >= IMAGE_MAX_SIZE_IN_BYTES ) {
+
+                BadPracticeResponse::toJson([], 0, "IMAGE must be less than " . IMAGE_MAX_SIZE_IN_BYTES . " bytes", 200);
+
+            }
+        }
         
         return true;
     }

@@ -32,6 +32,15 @@ class AddItemRequest extends RequestForm {
             $this->request['Description'] = filter_var($this->request['Description'], FILTER_SANITIZE_STRING);
         }
 
+        if( isset($this->request['ItemImg']) ) {
+
+            if( strlen($this->request['ItemImg']) >= IMAGE_MAX_SIZE_IN_BYTES ) {
+
+                BadPracticeResponse::toJson([], 0, "IMAGE must be less than " . IMAGE_MAX_SIZE_IN_BYTES . " bytes", 200);
+
+            }
+        }
+
         return true;
     }
 
