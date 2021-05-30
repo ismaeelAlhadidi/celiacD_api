@@ -87,6 +87,14 @@ class Auth {
         return static::login($user);
     }
 
+    public function refresh() {
+
+        if(static::$user instanceof User) {
+
+            static::$user = User::find($this->id());
+        }
+    }
+
     public function login(User $user) {
 
         static::$authenticated = true;
