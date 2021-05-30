@@ -640,7 +640,7 @@ abstract class Model implements ModelInterFace, IteratorAggregate, \ArrayAccess,
 
         foreach($record as $key => $value) {
 
-            $this->data[$key] = $value;
+            if(! in_array($key, $this->hidden)) $this->data[$key] = $value;
         }
 
         return $this;
